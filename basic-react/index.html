@@ -12,8 +12,6 @@
 
   <!-- Don't use this in production: -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-
 </head>
 
 <body>
@@ -21,19 +19,55 @@
 
   <script type="text/babel">
 
-    function Button() {
-      const [total, setTotal] = React.useState(0)
-      return <button onClick={() => setTotal(total + 1)}>Adicionar {total}</button>
+    const Button = () => {
+      return <button>Comprar</button>
     }
 
-    function App() {
+    const MainNav = () => {
+      return <nav>
+        <ul>
+          <li><a href="">Link 1</a></li>
+          <li><a href="">Link 2</a></li>
+        </ul>
+      </nav>
+    }
+
+    const Produtos = () => {
+      const produto1 = 'Camisa'
+      const produto2 = 'Bermuda'
+
+      function handleClick(event) {
+        console.log('Comprou ' + event.target.innerText);
+      }
+
       return <div>
-        <h1>Aplicativo React</h1>
-        <Button />
-        <Button />
+        <button onClick={handleClick}>{produto1} - R$ {Math.random() * 1000}</button>
+        <button onClick={handleClick}>{produto2} - R$ {Math.random() * 1000}</button>
       </div>
     }
 
+    const Comprar = () => {
+      const [count, setCount] = React.useState(5)
+
+      function handleClick() {
+        setCount(count + 1)
+      }
+
+      return <div>
+        <button onClick={handleClick}>Comprar: {count}</button>
+        <p>Total: {count}</p>
+        <p>Preço: {count * 100}</p>
+      </div>
+    }
+
+    const App = () => {
+      return <div>
+        <h1>ALOUUUUUUUU</h1>
+        <MainNav />
+        <Produtos />
+        <Comprar />
+      </div>
+    }
 
     const container = document.getElementById('root')
     const root = ReactDOM.createRoot(container)
