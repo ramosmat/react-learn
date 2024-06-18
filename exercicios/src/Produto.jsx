@@ -1,17 +1,17 @@
 import React from 'react';
 
-const Produto = ({ nome, propriedades }) => {
+const Produto = ({ dados }) => {
   return (
-    <div
-      key={nome}
-      style={{ border: '1px solid black', padding: '1rem', margin: '1rem' }}
-    >
-      <p>{nome}</p>
-      <ul>
-        {propriedades.map((prop, index) => (
-          <li key={index}>{prop}</li>
-        ))}
-      </ul>
+    <div>
+      <h1>{dados.nome}</h1>
+      <p>Preço: R$ {dados.preco}</p>
+      <picture>
+        <img
+          style={{ width: '100%', display: 'block', maxWidth: '300px' }}
+          src={dados.fotos[0].src}
+          alt=""
+        />
+      </picture>
     </div>
   );
 };
