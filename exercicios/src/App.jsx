@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from './Button';
 import Produto from './Produto';
+import Header from './Header';
 
 // Quando o usuário clicar em um dos botões, faça um fetch do produto clicado utilizando a api abaixo
 // https://ranekapi.origamid.dev/json/api/produto/notebook
@@ -11,35 +12,41 @@ import Produto from './Produto';
 // Quando o usuário entrar no site, se existe um produto no localStorage, faça o fetch do mesmo
 
 const App = () => {
-  const [produto, setProduto] = React.useState(null);
-  const [produtoUpper, setProdutoUpper] = React.useState(null);
+  const [produtoNome, setProdutoNome] = React.useState(null);
+  const [produtoFetch, setProdutoFetch] = React.useState(null);
 
   React.useEffect(() => {
-    const produtoInicial = window.localStorage.getItem('produto');
+    const produtoLocal = window.localStorage.getItem('produto');
 
-    if (produtoInicial) {
-      setProduto(produtoInicial);
+    if (produtoLocal !== null) {
+      setProdutoNome(
+        produtoLocal.charAt(0).toUpperCase() + produtoLocal.slice(1),
+      );
+      setProdutoFetch(produtoLocal);
     }
   }, []);
 
   React.useEffect(() => {
-    if (produto) {
-      window.localStorage.setItem('produto', produto);
+    if (produtoFetch !== null) {
+      window.localStorage.setItem('produto', produtoFetch);
     }
-  }, [produto]);
+  }, [produtoFetch]);
 
   function handleClick(event) {
-    setProduto(event.target.innerText);
+    const produto = event.target.innerText;
+
+    setProdutoNome(produto);
+    setProdutoFetch(produto.toLowerCase());
   }
 
   return (
     <>
-      <h1>Preferência: {produto}</h1>
+      <Header produto={produtoNome} />
       <div style={{ display: 'flex', gap: '1rem' }}>
-        <Button handleClick={handleClick} texto={'notebook'} />
-        <Button handleClick={handleClick} texto={'smartphone'} />
+        <Button handleClick={handleClick} texto={'Notebook'} />
+        <Button handleClick={handleClick} texto={'Smartphone'} />
       </div>
-      <Produto produto={produto} />
+      <Produto produto={produtoFetch} />
     </>
   );
 };
