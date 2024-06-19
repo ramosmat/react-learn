@@ -1,39 +1,45 @@
 import React from 'react';
 import Button from './Button';
 import Produto from './Produto';
-// Os links abaixo puxam dados de um produto em formato JSON
-// https://ranekapi.origamid.dev/json/api/produto/tablet
-// https://ranekapi.origamid.dev/json/api/produto/smartphone
+
+// Quando o usuário clicar em um dos botões, faça um fetch do produto clicado utilizando a api abaixo
 // https://ranekapi.origamid.dev/json/api/produto/notebook
-// Crie uma interface com 3 botões, um para cada produto.
-// Ao clicar no botão faça um fetch a api e mostre os dados do produto na tela.
-// Mostre apenas um produto por vez
-// Mostre a mensagem carregando... enquanto o fetch é realizado
+// https://ranekapi.origamid.dev/json/api/produto/smartphone
+// Mostre o nome e preço na tela (separe essa informação em um componente Produto.js)
+
+// Defina o produto clicado como uma preferência do usuário no localStorage
+// Quando o usuário entrar no site, se existe um produto no localStorage, faça o fetch do mesmo
 
 const App = () => {
-  const [dados, setDados] = React.useState(null);
-  const [carregando, setCarregando] = React.useState(null);
+  const [produto, setProduto] = React.useState(null);
+  const [produtoUpper, setProdutoUpper] = React.useState(null);
 
-  async function fetchApi(produto) {
-    const response = await fetch(
-      `https://ranekapi.origamid.dev/json/api/produto/${produto}`,
-    );
-    const result = await response.json();
+  React.useEffect(() => {
+    const produtoInicial = window.localStorage.getItem('produto');
 
-    setDados(result);
-    setCarregando(false);
+    if (produtoInicial) {
+      setProduto(produtoInicial);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (produto) {
+      window.localStorage.setItem('produto', produto);
+    }
+  }, [produto]);
+
+  function handleClick(event) {
+    setProduto(event.target.innerText);
   }
 
   return (
     <>
+      <h1>Preferência: {produto}</h1>
       <div style={{ display: 'flex', gap: '1rem' }}>
-        <Button fetchApi={fetchApi} nome="Tablet" />
-        <Button fetchApi={fetchApi} nome="Smartphone" />
-        <Button fetchApi={fetchApi} nome="Notebook" />
+        <Button handleClick={handleClick} texto={'notebook'} />
+        <Button handleClick={handleClick} texto={'smartphone'} />
       </div>
-
-      {carregando && <p>Carregando...</p>}
-      {!carregando && dados && <Produto dados={dados} />}
+      <Produto produto={produto} />
     </>
   );
 };
