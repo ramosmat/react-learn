@@ -1,72 +1,64 @@
 import React from 'react';
+import Input from './Input';
+import Select from './Select';
+import Radio from './Radio';
+import Checkbox from './Checkbox';
 
 const App = () => {
-  const [cores, setCores] = React.useState([]);
+  const [nome, setNome] = React.useState('');
+  const [email, setEmail] = React.useState('');
 
-  function handleChange({ target }) {
-    if (target.checked) {
-      setCores([...cores, target.value]);
-    } else {
-      setCores(cores.filter((cor) => cor !== target.value));
-    }
-  }
+  const [produto, setProduto] = React.useState('');
 
-  function handleChecked(cor) {
-    return cores.includes(cor);
-  }
+  const [cor, setCor] = React.useState('');
+  const [frutas, setFrutas] = React.useState('');
+
+  const [linguagens, setLinguagens] = React.useState([]);
+  const [termos, setTermos] = React.useState([]);
 
   return (
     <form>
-      <label>
-        <input
-          type="checkbox"
-          value="azul"
-          checked={handleChecked('azul')}
-          onChange={handleChange}
-        />
-        Azul
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="vermelho"
-          checked={handleChecked('vermelho')}
-          onChange={handleChange}
-        />
-        Vermelho
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="verde"
-          checked={handleChecked('verde')}
-          onChange={handleChange}
-        />
-        Verde
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="amarelo"
-          checked={handleChecked('amarelo')}
-          onChange={handleChange}
-        />
-        Amarelo
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="roxo"
-          checked={handleChecked('roxo')}
-          onChange={handleChange}
-        />
-        Roxo
-      </label>
-      <ul>
-        {cores.map((cor) => (
-          <li key={cor}>{cor}</li>
-        ))}
-      </ul>
+      <h2>Termos</h2>
+      <Checkbox
+        options={['Li e aceito os termos']}
+        value={termos}
+        setValue={setTermos}
+      />
+      <h2>Checkbox</h2>
+      <Checkbox
+        options={['JavaScript', 'PHP', 'Ruby']}
+        value={linguagens}
+        setValue={setLinguagens}
+      />
+
+      <h2>Cores</h2>
+      <Radio
+        options={['Azul', 'Vermelho', 'Verde']}
+        value={cor}
+        setValue={setCor}
+      />
+      <h2>Frutas</h2>
+      <Radio
+        options={['Uva', 'Morango', 'Banana']}
+        value={frutas}
+        setValue={setFrutas}
+      />
+
+      <Select
+        options={['Notebook', 'Smartphone', 'Tablet']}
+        value={produto}
+        setValue={setProduto}
+      />
+
+      <Input label="Nome" id="nome" value={nome} setValue={setNome} />
+      <Input
+        label="Email"
+        id="email"
+        value={email}
+        setValue={setEmail}
+        required
+      />
+      <button>Enviar</button>
     </form>
   );
 };
