@@ -1,43 +1,98 @@
 import React from 'react';
-// Otimize o código do slide anterior
-// Utilizando a array abaixo para mostrar
-// cada checkbox na tela.
+import Radio from './Radio';
+
+const perguntas = [
+  {
+    pergunta: 'Qual método é utilizado para criar componentes?',
+    options: [
+      'React.makeComponent()',
+      'React.createComponent()',
+      'React.createElement()',
+    ],
+    resposta: 'React.createElement()',
+    id: 'p1',
+  },
+  {
+    pergunta: 'Como importamos um componente externo?',
+    options: [
+      'import Component from "./Component"',
+      'require("./Component")',
+      'import "./Component"',
+    ],
+    resposta: 'import Component from "./Component"',
+    id: 'p2',
+  },
+  {
+    pergunta: 'Qual hook não é nativo?',
+    options: ['useEffect()', 'useFetch()', 'useCallback()'],
+    resposta: 'useFetch()',
+    id: 'p3',
+  },
+  {
+    pergunta: 'Qual palavra deve ser utilizada para criarmos um hook?',
+    options: ['set', 'get', 'use'],
+    resposta: 'use',
+    id: 'p4',
+  },
+];
 
 const App = () => {
-  const coresArray = ['azul', 'roxo', 'laranja', 'verde', 'vermelho', 'cinza'];
-  const [cores, setCores] = React.useState([]);
+  const [respostas, setRespostas] = React.useState({
+    p1: '',
+    p2: '',
+    p3: '',
+    p4: '',
+  });
+  const [slide, setSlide] = React.useState(0);
+  const [resultado, setResultado] = React.useState(null);
 
   function handleChange({ target }) {
-    if (target.checked) {
-      setCores([...cores, target.value]);
+    setRespostas({ ...respostas, [target.id]: target.value });
+  }
+
+  function resultadoFinal() {
+    const corretas = perguntas.filter(
+      ({ id, resposta }) => respostas[id] === resposta,
+    );
+    setResultado(`Você acertou: ${corretas.length} de ${perguntas.length}`);
+  }
+
+  function handleProxima() {
+    if (slide < perguntas.length - 1) {
+      setSlide(slide + 1);
     } else {
-      setCores(cores.filter((cor) => cor !== target.value));
+      setSlide(slide + 1);
+      resultadoFinal();
     }
   }
 
-  function handleChecked(cor) {
-    return cores.includes(cor);
+  function handleAnterior() {
+    if (slide > 0) {
+      setSlide(slide - 1);
+    }
   }
 
   return (
-    <form>
-      {coresArray.map((cores, index) => (
-        <label key={index} style={{ textTransform: 'capitalize' }}>
-          <input
-            type="checkbox"
-            value={cores}
-            checked={handleChecked(cores)}
-            onChange={handleChange}
-          />
-          {cores}
-        </label>
+    <form onSubmit={(event) => event.preventDefault()}>
+      {perguntas.map((pergunta, index) => (
+        <Radio
+          active={slide === index}
+          key={pergunta.id}
+          value={respostas[pergunta.id]}
+          onChange={handleChange}
+          {...pergunta}
+        />
       ))}
-
-      <ul>
-        {cores.map((cor) => (
-          <li key={cor}>{cor}</li>
-        ))}
-      </ul>
+      {resultado ? (
+        <p>{resultado}</p>
+      ) : (
+        <div>
+          <button onClick={handleAnterior} style={{ marginRight: '1rem' }}>
+            Anterior
+          </button>
+          <button onClick={handleProxima}>Próxima</button>
+        </div>
+      )}
     </form>
   );
 };
