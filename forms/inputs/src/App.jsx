@@ -1,40 +1,19 @@
 import React from 'react';
+import Input from './Input';
 
 const App = () => {
-  const [form, setForm] = React.useState({
-    nome: '',
-    email: '',
-  });
-
-  function handleChange({ target }) {
-    const { id, value } = target;
-
-    setForm({ ...form, [id]: value });
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    console.log(event);
-  }
+  const [nome, setNome] = React.useState('');
+  const [email, setEmail] = React.useState('');
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="nome">Nome</label>
-      <input
-        id="nome"
-        type="text"
-        name="nome"
-        value={form.nome}
-        onChange={handleChange}
-      />
-
-      <label htmlFor="email">Email</label>
-      <input
+    <form>
+      <Input label="Nome" id="nome" value={nome} setValue={setNome} />
+      <Input
+        label="Email"
         id="email"
-        type="email"
-        name="email"
-        value={form.email}
-        onChange={handleChange}
+        value={email}
+        setValue={setEmail}
+        required
       />
       <button>Enviar</button>
     </form>
