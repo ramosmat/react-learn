@@ -9,7 +9,7 @@ const Select = ({ options, value, setValue, ...props }) => {
       }}
       {...props}
     >
-      <option value="" disabled selected>
+      <option value="" disabled>
         Selecione...
       </option>
       {options.map((option) => (
